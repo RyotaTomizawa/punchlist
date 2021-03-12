@@ -1,0 +1,70 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_overboard/flutter_overboard.dart';
+
+class TutorialPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.grey[50],
+        brightness: Brightness.light,
+        iconTheme: IconThemeData(color: Colors.black45),
+        title: Text('チュートリアル', style: TextStyle(color: Colors.black87)),
+      ),
+      body: OverBoard(
+        pages: pages,
+        showBullets: true,
+        skipCallback: () {
+          // when user select SKIP
+          Navigator.pop(context);
+        },
+        finishCallback: () {
+          // when user select NEXT
+          Navigator.pop(context);
+        },
+      ),
+    );
+  }
+
+  final pages = [
+    PageModel(
+        color: const Color(0xFF95cedd),
+        imageAssetPath: 'assets/img1.png',
+        title: 'パンチリスト画面',
+        body: 'タップ:タスク画面へ遷移\n'
+            '左スワイプ:パンチリスト編集\n'
+            '右スワイプ:テンプレートメール送信',
+        doAnimateImage: true),
+    PageModel(
+        color: const Color(0xFF9B90BC),
+        imageAssetPath: 'assets/img2.png',
+        title: 'タスク画面',
+        body: 'タップ:完了/未完了 切替\n'
+            '右スワイプ:タスク編集',
+        doAnimateImage: true),
+    PageModel.withChild(
+        child: Padding(
+            padding: EdgeInsets.only(bottom: 25.0),
+            child: RichText(
+              text: TextSpan(children: [
+                TextSpan(
+                  text: 'さあ始めましょう\n',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                  ),
+                ),
+                TextSpan(
+                  text: 'チュートリアルはパンチリスト画面左上のアイコンから確認できます',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ]),
+            )),
+        color: const Color(0xFF5886d6),
+        doAnimateChild: true)
+  ];
+}
