@@ -114,16 +114,20 @@ class _ChangeFormState extends State<ChangeForm> {
                     },
                   ),
                   TextFormField(
-                    maxLines: 7,
+                    maxLines: 4,
                     maxLength: 200,
                     maxLengthEnforced: true,
                     decoration: const InputDecoration(
                       labelText: 'アイテム概要',
                     ),
                     validator: (String value) {
-                      return '\n'.allMatches(value).length > 7
-                          ? '７行以内で入力してください'
-                          : null;
+                      if ('\n'.allMatches(value).length > 7) {
+                        return '７行以内で入力してください';
+                      }
+                      if (value.isEmpty) {
+                        return '必須項目です';
+                      }
+                      return null;
                     },
                     onSaved: (String value) {
                       itemExplanation = value;

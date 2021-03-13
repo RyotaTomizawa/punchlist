@@ -77,7 +77,13 @@ class _ChangeFormState extends State<ChangeForm> {
                         labelText: 'パンチリスト名 *',
                       ),
                       validator: (String value) {
-                        return value.isEmpty ? '必須入力です' : null;
+                        if ('\n'.allMatches(value).length > 7) {
+                          return '７行以内で入力してください';
+                        }
+                        if (value.isEmpty) {
+                          return '必須項目です';
+                        }
+                        return null;
                       },
                       onSaved: (String value) {
                         punchlistName = value;
@@ -119,9 +125,13 @@ class _ChangeFormState extends State<ChangeForm> {
                         labelText: 'パンチリスト概要',
                       ),
                       validator: (String value) {
-                        return '\n'.allMatches(value).length > 7
-                            ? '７行以内で入力してください'
-                            : null;
+                        if ('\n'.allMatches(value).length > 7) {
+                          return '７行以内で入力してください';
+                        }
+                        if (value.isEmpty) {
+                          return '必須項目です';
+                        }
+                        return null;
                       },
                       onSaved: (String value) {
                         explanationPunchlist = value;
