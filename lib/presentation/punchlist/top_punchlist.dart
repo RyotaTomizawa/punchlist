@@ -181,12 +181,6 @@ class _TopPunchlistPageState extends State {
     }
   }
 
-  // ドキュメントのパスを取得
-  static Future get localPath async {
-    final directory = await getApplicationDocumentsDirectory();
-    return directory.path;
-  }
-
   static Future<String> getPdfPath(
       PunchlistElement selectedPunchlistElement) async {
     File savedFile;
