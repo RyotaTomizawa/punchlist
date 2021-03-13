@@ -47,7 +47,6 @@ class _ChangeFormState extends State<ChangeForm> {
   final _formKey = GlobalKey<FormState>();
   String punchlistName = '';
   String createDate = (DateFormat.yMMMd()).format(DateTime.now());
-  String createUser = '';
   String explanationPunchlist = '';
 
   Widget build(BuildContext context) {
@@ -73,18 +72,6 @@ class _ChangeFormState extends State<ChangeForm> {
                       },
                       onSaved: (String value) {
                         punchlistName = value;
-                      },
-                    ),
-                    TextFormField(
-                      maxLength: 20,
-                      decoration: const InputDecoration(
-                        labelText: '作成者名 *',
-                      ),
-                      validator: (String value) {
-                        return value.isEmpty ? '必須入力です' : null;
-                      },
-                      onSaved: (String value) {
-                        createUser = value;
                       },
                     ),
                     Container(
@@ -124,13 +111,6 @@ class _ChangeFormState extends State<ChangeForm> {
                             ? '７行以内で入力してください'
                             : null;
                       },
-                      /*
-                      validator: (String value) {
-                        return '\n'.allMatches(value).length > 7
-                            ? '７行以内で入力してください'
-                            : null;
-                      },
-                      * */
                       onSaved: (String value) {
                         explanationPunchlist = value;
                       },
@@ -174,7 +154,6 @@ class _ChangeFormState extends State<ChangeForm> {
       punchlistId: punchlistId,
       punchlistName: punchlistName,
       createDate: createDate,
-      createUser: createUser,
       explanationPunchlist: explanationPunchlist,
     );
     await punchlistModel.create(punchlistElement);
