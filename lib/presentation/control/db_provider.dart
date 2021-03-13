@@ -46,7 +46,7 @@ class DBProvider {
         itemId: Uuid().v4(),
         imgName: "",
         itemName: "椅子の設営",
-        itemExplanation: "※サンプルで作成されたタスクです。"
+        itemExplanation: "サンプルで作成されたタスクです。"
             "\n合計20脚の椅子を設営する"
             "\n内訳：白が10個、黒が10個"
             "\n白いテーブルには白い椅子"
@@ -60,7 +60,7 @@ class DBProvider {
         itemId: Uuid().v4(),
         imgName: "",
         itemName: "テーブルの搬入",
-        itemExplanation: "※サンプルで作成されたタスクです。"
+        itemExplanation: "サンプルで作成されたタスクです。"
             "\n合計10個のテーブルを設営する"
             "\n内訳：白が5個、黒が5個"
             "\n作業員が必要な場合は事前にメールで募る",
