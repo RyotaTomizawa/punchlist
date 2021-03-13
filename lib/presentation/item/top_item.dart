@@ -145,6 +145,10 @@ class _ChangeItemlist extends State<ChangeItemlist> {
                                       : Border.all(color: Colors.red, width: 2),
                                 ),
                               ),
+                        subtitle: Text(snapshot.data[index].itemExplanation
+                                .replaceAll('\n', '')
+                                .substring(0, 34) +
+                            '..'),
                         onTap: () async {
                           Item item;
                           ItemModel itemModel =

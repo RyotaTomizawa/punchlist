@@ -125,7 +125,22 @@ class _TopPunchlistPageState extends State {
                           child: ListTile(
                               leading: Icon(Icons.folder_rounded),
                               title: Text(snapshot.data[index].punchlistName),
-                              subtitle: Text(snapshot.data[index].createDate),
+                              subtitle: RichText(
+                                text: TextSpan(
+                                  style: TextStyle(color: Colors.black),
+                                  children: [
+                                    TextSpan(
+                                        text: snapshot.data[index].createDate),
+                                    TextSpan(text: '\n'),
+                                    TextSpan(
+                                        text: snapshot.data[index]
+                                                .explanationPunchlist
+                                                .replaceAll('\n', '')
+                                                .substring(0, 34) +
+                                            '..'),
+                                  ],
+                                ),
+                              ),
                               trailing: Icon(Icons.arrow_forward_ios_rounded),
                               onTap: () {
                                 Navigator.of(context).pushNamed('/itemMain',
