@@ -20,12 +20,8 @@ class _ItemMainPageState extends State {
         ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.grey[50],
-        brightness: Brightness.light,
-        iconTheme: IconThemeData(color: Colors.black45),
         title: Text(selectedPunchlistElement.punchlistName,
-            style: TextStyle(color: Colors.black87)),
+            style: TextStyle(color: Colors.white)),
       ),
       body: Container(
         child: ChangeItemlist(selectedPunchlistElement),

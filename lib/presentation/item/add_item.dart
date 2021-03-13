@@ -22,11 +22,7 @@ class _AddItemPageState extends State {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.grey[50],
-        brightness: Brightness.light,
-        iconTheme: IconThemeData(color: Colors.black45),
-        title: Text("アイテム追加", style: TextStyle(color: Colors.black87)),
+        title: Text("アイテム追加", style: TextStyle(color: Colors.white)),
       ),
       body: Container(
         child: ChangeForm(),
