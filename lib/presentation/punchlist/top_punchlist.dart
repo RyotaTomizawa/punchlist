@@ -26,6 +26,12 @@ class TopPunchlistPageState extends StatefulWidget {
 class _TopPunchlistPageState extends State {
   Email email;
   @override
+  initState() {
+    super.initState();
+    _showTutorial(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -199,10 +205,43 @@ class _TopPunchlistPageState extends State {
     );
   }
 
-  @override
-  initState() {
-    super.initState();
-    _showTutorial(context);
+  static Future<String> getPdfPath(
+      PunchlistElement selectedPunchlistElement) async {
+    File savedFile;
+    List<Item> itemlist = await DBProvider.db
+        .getAllItemByPunchlistId(selectedPunchlistElement.punchlistId);
+    final punchlistName = selectedPunchlistElement.punchlistName;
+    final path = await DBProvider.documentsDirectory.path;
+    final pdfPath = '$path/$punchlistName.pdf';
+    final pdfFile = File(pdfPath);
+    final pdf = pw.Document();
+    var data = await rootBundle.load('assets/font/ipagp.ttf');
+    final ttf = pw.Font.ttf(data);
+    if (itemlist.length != 0) {
+      for (var itemNum = 0; itemNum < itemlist.length; itemNum += 5) {
+        List<pw.Widget> itemPdfList = List<pw.Widget>();
+        pdf.addPage(pw.Page(
+            pageFormat: PdfPageFormat.a4,
+            build: (pw.Context context) {
+              return pw.Column(
+                children: <pw.Widget>[
+                  layoutPunchlistElement(selectedPunchlistElement, ttf),
+                  layoutItem(itemlist, ttf, itemNum, itemPdfList)
+                ],
+              );
+            }));
+      }
+    } else {
+      pdf.addPage(pw.Page(
+          pageFormat: PdfPageFormat.a4,
+          build: (pw.Context context) {
+            return pw.Container(
+              child: layoutPunchlistElement(selectedPunchlistElement, ttf),
+            );
+          }));
+    }
+    savedFile = await pdfFile.writeAsBytes(await pdf.save());
+    return await savedFile.path;
   }
 
   void _showTutorial(BuildContext context) async {
@@ -217,35 +256,6 @@ class _TopPunchlistPageState extends State {
       );
       await pref.setBool('isAlreadyFirstLaunch', true);
     }
-  }
-
-  static Future<String> getPdfPath(
-      PunchlistElement selectedPunchlistElement) async {
-    File savedFile;
-    List<Item> itemlist = await DBProvider.db
-        .getAllItemByPunchlistId(selectedPunchlistElement.punchlistId);
-    final punchlistName = selectedPunchlistElement.punchlistName;
-    final path = await DBProvider.documentsDirectory.path;
-    final pdfPath = '$path/$punchlistName.pdf';
-    final pdfFile = File(pdfPath);
-    final pdf = pw.Document();
-    var data = await rootBundle.load('assets/font/ipagp.ttf');
-    final ttf = pw.Font.ttf(data);
-    for (var itemNum = 0; itemNum < itemlist.length; itemNum += 5) {
-      List<pw.Widget> itemPdfList = List<pw.Widget>();
-      pdf.addPage(pw.Page(
-          pageFormat: PdfPageFormat.a4,
-          build: (pw.Context context) {
-            return pw.Column(
-              children: <pw.Widget>[
-                layoutPunchlistElement(selectedPunchlistElement, ttf),
-                layoutItem(itemlist, ttf, itemNum, itemPdfList),
-              ],
-            );
-          }));
-    }
-    savedFile = await pdfFile.writeAsBytes(await pdf.save());
-    return await savedFile.path;
   }
 
   static pw.Widget layoutPunchlistElement(
