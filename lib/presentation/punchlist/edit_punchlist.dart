@@ -19,13 +19,14 @@ class _EditPunchlistPageState extends State {
   PunchlistElement selectedPunchListElement;
   _EditPunchlistPageState(this.selectedPunchListElement);
   Widget build(BuildContext context) {
+    String createDate = selectedPunchListElement.createDate;
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text("パンチリスト編集", style: TextStyle(color: Colors.white)),
       ),
       body: Container(
-        child: ChangeForm(selectedPunchListElement),
+        child: ChangeForm(selectedPunchListElement, createDate),
       ),
       bottomNavigationBar: AdmobBanner(
         adUnitId: AdMobService().getBannerAdUnitId(),
@@ -42,16 +43,18 @@ class _EditPunchlistPageState extends State {
 class ChangeForm extends StatefulWidget {
   @override
   PunchlistElement selectedPunchListElement;
-  ChangeForm(this.selectedPunchListElement);
-  _ChangeFormState createState() => _ChangeFormState(selectedPunchListElement);
+  String createDate;
+  ChangeForm(this.selectedPunchListElement, this.createDate);
+  _ChangeFormState createState() =>
+      _ChangeFormState(selectedPunchListElement, createDate);
 }
 
 class _ChangeFormState extends State<ChangeForm> {
   PunchlistElement selectedPunchListElement;
-  _ChangeFormState(this.selectedPunchListElement);
+  _ChangeFormState(this.selectedPunchListElement, this.createDate);
   final _formKey = GlobalKey<FormState>();
   String punchlistName = '';
-  String createDate = '';
+  String createDate;
   String createUser = '';
   String explanationPunchlist = '';
 
@@ -110,8 +113,7 @@ class _ChangeFormState extends State<ChangeForm> {
                         children: <Widget>[
                           GestureDetector(
                             onTap: () => _selectDate(context),
-                            child: Text(createDate =
-                                selectedPunchListElement.createDate),
+                            child: Text(createDate),
                           ),
                           Expanded(
                             child: Container(
