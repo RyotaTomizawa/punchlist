@@ -125,22 +125,41 @@ class _TopPunchlistPageState extends State {
                           child: ListTile(
                               leading: Icon(Icons.folder_rounded),
                               title: Text(snapshot.data[index].punchlistName),
-                              subtitle: RichText(
-                                text: TextSpan(
-                                  style: TextStyle(color: Colors.black),
-                                  children: [
-                                    TextSpan(
-                                        text: snapshot.data[index].createDate),
-                                    TextSpan(text: '\n'),
-                                    TextSpan(
-                                        text: snapshot.data[index]
-                                                .explanationPunchlist
-                                                .replaceAll('\n', '')
-                                                .substring(0, 34) +
-                                            '..'),
-                                  ],
-                                ),
-                              ),
+                              subtitle: snapshot.data[index]
+                                          .explanationPunchlist.length >=
+                                      34
+                                  ? RichText(
+                                      text: TextSpan(
+                                        style: TextStyle(color: Colors.black),
+                                        children: [
+                                          TextSpan(
+                                              text: snapshot
+                                                  .data[index].createDate),
+                                          TextSpan(text: '\n'),
+                                          TextSpan(
+                                              text: snapshot.data[index]
+                                                      .explanationPunchlist
+                                                      .replaceAll('\n', '')
+                                                      .substring(0, 34) +
+                                                  '..'),
+                                        ],
+                                      ),
+                                    )
+                                  : RichText(
+                                      text: TextSpan(
+                                        style: TextStyle(color: Colors.black),
+                                        children: [
+                                          TextSpan(
+                                              text: snapshot
+                                                  .data[index].createDate),
+                                          TextSpan(text: '\n'),
+                                          TextSpan(
+                                              text: snapshot.data[index]
+                                                  .explanationPunchlist
+                                                  .replaceAll('\n', '')),
+                                        ],
+                                      ),
+                                    ),
                               trailing: Icon(Icons.arrow_forward_ios_rounded),
                               onTap: () {
                                 Navigator.of(context).pushNamed('/itemMain',
@@ -233,7 +252,6 @@ class _TopPunchlistPageState extends State {
       PunchlistElement selectedPunchlistElement, pw.Font ttf) {
     String punchlistName = selectedPunchlistElement.punchlistName;
     String createDate = selectedPunchlistElement.createDate;
-    String createUser = selectedPunchlistElement.createUser;
     String explanationPunchlist = selectedPunchlistElement.explanationPunchlist;
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -244,10 +262,6 @@ class _TopPunchlistPageState extends State {
         ),
         pw.Text(
           "パンチリスト作成日　：　" + createDate,
-          style: pw.TextStyle(font: ttf, fontSize: 10),
-        ),
-        pw.Text(
-          "パンチリスト作成者　：　" + createUser,
           style: pw.TextStyle(font: ttf, fontSize: 10),
         ),
         pw.Text(
