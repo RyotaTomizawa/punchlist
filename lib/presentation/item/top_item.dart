@@ -134,6 +134,7 @@ class _ChangeItemlist extends State<ChangeItemlist> {
                               height: 50.0,
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
+                                border: Border.all(color: Colors.black45),
                               ),
                             ),
                       subtitle:
