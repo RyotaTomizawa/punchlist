@@ -7,6 +7,7 @@ import 'package:punch_list_app/presentation/item/edit_item.dart';
 import 'package:punch_list_app/presentation/punchlist/edit_punchlist.dart';
 import 'package:punch_list_app/services/admob.dart';
 import 'package:punch_list_app/tutorial/tutorialPage.dart';
+import 'common/punchlist_colors.dart';
 import 'domain/item.dart';
 import 'presentation/punchlist/add_punchlist.dart';
 import 'presentation/item/Item_main.dart';
@@ -44,6 +45,7 @@ class _MyApp extends State {
         '/addItem': (BuildContext context) => AddItemPageState(),
         '/editItem': (BuildContext context) => EditItemPageState(),
       },
+      theme: punchlistTheme(),
     );
   }
 }
@@ -59,12 +61,8 @@ class _ChangePunchlist extends State {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.grey[50],
-        brightness: Brightness.light,
-        iconTheme: IconThemeData(color: Colors.black45),
         leading: IconButton(
-          icon: Icon(Icons.help),
+          icon: Icon(Icons.help_outline_sharp),
           onPressed: () => setState(() {
             Navigator.push(
               context,
@@ -77,7 +75,7 @@ class _ChangePunchlist extends State {
         ),
         title: Text(
           "パンチリスト",
-          style: TextStyle(color: Colors.black87),
+          style: TextStyle(color: Colors.white),
         ),
         automaticallyImplyLeading: false,
       ),
