@@ -16,11 +16,9 @@ class TutorialPage extends StatelessWidget {
         pages: pages,
         showBullets: true,
         skipCallback: () {
-          // when user select SKIP
           Navigator.pop(context);
         },
         finishCallback: () {
-          // when user select NEXT
           Navigator.pop(context);
         },
       ),
@@ -45,7 +43,7 @@ class TutorialPage extends StatelessWidget {
         doAnimateImage: true),
     PageModel.withChild(
         child: Padding(
-            padding: EdgeInsets.only(bottom: 25.0),
+            padding: EdgeInsets.all(25),
             child: RichText(
               text: TextSpan(children: [
                 TextSpan(
@@ -56,7 +54,7 @@ class TutorialPage extends StatelessWidget {
                   ),
                 ),
                 TextSpan(
-                  text: 'チュートリアルはパンチリスト画面左上のアイコンから確認できます',
+                  text: 'チュートリアルは\nパンチリスト画面左上のアイコンから\nいつでも確認できます',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16,

@@ -17,12 +17,10 @@ class DBProvider {
   static final _tableNamePunchlist = "PunchlistElement";
   static final _tableNameItem = "Item";
 
-  // 共通メソッド
   Future<Database> get database async {
     if (_database != null) {
       return _database;
     }
-    // DBがなかったら作る
     _database = await initDB();
     await createSampleData(_database);
     return _database;
@@ -31,26 +29,44 @@ class DBProvider {
   void createSampleData(Database db) async {
     final pref = await SharedPreferences.getInstance();
     if (pref.getBool('isAlreadySample') != true) {
-      // サンプルデータを準備する
       String samplePunchlistId = Uuid().v4();
       PunchlistElement punchlistElement = new PunchlistElement(
         punchlistId: samplePunchlistId,
-        punchlistName: "サンプルパンチリスト",
+        punchlistName: "カフェの設営",
         createDate: (DateFormat.yMMMd()).format(DateTime.now()),
-        createUser: "サンプル",
-        explanationPunchlist: "サンプルで作成されましたパンチリストです。",
+        createUser: "サンプルユーザー",
+        explanationPunchlist: "サンプルで作成されましたパンチリストです。"
+            "\n南青山の空きテナントにカフェを設営する。"
+            "\n担当する仕事は毎週水曜日にチーフへメールで共有する。"
+            "\n期限が短いタスクから着手していく。",
       );
-      Item item = Item(
+      await db.insert(_tableNamePunchlist, punchlistElement.toMap());
+      Item sampleItem1 = Item(
         punchlistId: samplePunchlistId,
         itemId: Uuid().v4(),
         imgName: "",
-        itemName: "サンプルタスク",
-        itemExplanation: "サンプルで作成されたタスクです。",
+        itemName: "椅子の設営",
+        itemExplanation: "※サンプルで作成されたタスクです。"
+            "\n合計20脚の椅子を設営する"
+            "\n内訳：白が10個、黒が10個"
+            "\n白いテーブルには白い椅子"
+            "\n黒いテーブルには黒いテーブル"
+            "\n作業員が必要な場合は事前にメールで募る",
         itemStatus: "1",
       );
-      // サンプルデータを投入する
-      await db.insert(_tableNamePunchlist, punchlistElement.toMap());
-      await db.insert(_tableNameItem, item.toMap());
+      await db.insert(_tableNameItem, sampleItem1.toMap());
+      Item sampleItem2 = Item(
+        punchlistId: samplePunchlistId,
+        itemId: Uuid().v4(),
+        imgName: "",
+        itemName: "テーブルの搬入",
+        itemExplanation: "※サンプルで作成されたタスクです。"
+            "\n合計10個のテーブルを設営する"
+            "\n内訳：白が5個、黒が5個"
+            "\n作業員が必要な場合は事前にメールで募る",
+        itemStatus: "0",
+      );
+      await db.insert(_tableNameItem, sampleItem2.toMap());
       await pref.setBool('isAlreadySample', true);
     }
   }
