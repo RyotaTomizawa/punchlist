@@ -114,7 +114,7 @@ class _ChangeFormState extends State<ChangeForm> {
                     },
                   ),
                   TextFormField(
-                    maxLines: 4,
+                    maxLines: 7,
                     maxLength: 200,
                     maxLengthEnforced: true,
                     decoration: const InputDecoration(

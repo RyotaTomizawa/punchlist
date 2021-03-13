@@ -118,7 +118,7 @@ class _ChangeFormState extends State<ChangeForm> {
                     TextFormField(
                       initialValue:
                           selectedPunchListElement.explanationPunchlist,
-                      maxLines: 4,
+                      maxLines: 7,
                       maxLength: 200,
                       keyboardType: TextInputType.multiline,
                       decoration: const InputDecoration(
