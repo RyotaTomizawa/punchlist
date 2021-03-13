@@ -115,9 +115,36 @@ class _ChangeItemlist extends State<ChangeItemlist> {
                     padding: EdgeInsets.only(bottom: 5.0),
                     child: ListTile(
                         title: Text(snapshot.data[index].itemName),
-                        leading: snapshot.data[index].itemStatus == "1"
-                            ? Icon(Icons.check_box_outlined)
-                            : Icon(Icons.check_box_outline_blank),
+                        leading: snapshot.data[index].imgName != ''
+                            ? Container(
+                                width: 50.0,
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border:
+                                        snapshot.data[index].itemStatus == "1"
+                                            ? Border.all(
+                                                color: Colors.green, width: 2)
+                                            : Border.all(
+                                                color: Colors.red, width: 2),
+                                    image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: AssetImage(
+                                            DBProvider.documentsDirectory.path +
+                                                "/" +
+                                                snapshot.data[index].imgName))),
+                              )
+                            : Container(
+                                width: 50.0,
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: snapshot.data[index].itemStatus == "1"
+                                      ? Border.all(
+                                          color: Colors.green, width: 2)
+                                      : Border.all(color: Colors.red, width: 2),
+                                ),
+                              ),
                         onTap: () async {
                           Item item;
                           ItemModel itemModel =
