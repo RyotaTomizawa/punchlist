@@ -8,12 +8,12 @@ import '../model/item_model.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 
-class ItemMainPageState extends StatefulWidget {
+class TopItemPageState extends StatefulWidget {
   @override
-  _ItemMainPageState createState() => _ItemMainPageState();
+  _TopItemPageState createState() => _TopItemPageState();
 }
 
-class _ItemMainPageState extends State {
+class _TopItemPageState extends State {
   @override
   Widget build(BuildContext context) {
     PunchlistElement selectedPunchlistElement =
