@@ -113,64 +113,58 @@ class _ChangeItemlist extends State<ChangeItemlist> {
                   child: Container(
                     color: Colors.white,
                     padding: EdgeInsets.only(bottom: 5.0),
-                    child: ListTile(
-                        title: Text(snapshot.data[index].itemName),
-                        leading: snapshot.data[index].imgName != ''
-                            ? Container(
-                                width: 50.0,
-                                height: 50.0,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border:
-                                        snapshot.data[index].itemStatus == "1"
-                                            ? Border.all(
-                                                color: Colors.green, width: 2)
-                                            : Border.all(
-                                                color: Colors.red, width: 2),
-                                    image: DecorationImage(
-                                        fit: BoxFit.fill,
-                                        image: AssetImage(
-                                            DBProvider.documentsDirectory.path +
-                                                "/" +
-                                                snapshot.data[index].imgName))),
-                              )
-                            : Container(
-                                width: 50.0,
-                                height: 50.0,
-                                decoration: BoxDecoration(
+                    child: CheckboxListTile(
+                      tristate: true,
+                      title: Text(snapshot.data[index].itemName),
+                      secondary: snapshot.data[index].imgName != ''
+                          ? Container(
+                              width: 50.0,
+                              height: 50.0,
+                              decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  border: snapshot.data[index].itemStatus == "1"
-                                      ? Border.all(
-                                          color: Colors.green, width: 2)
-                                      : Border.all(color: Colors.red, width: 2),
-                                ),
+                                  image: DecorationImage(
+                                      fit: BoxFit.fill,
+                                      image: AssetImage(
+                                          DBProvider.documentsDirectory.path +
+                                              "/" +
+                                              snapshot.data[index].imgName))),
+                            )
+                          : Container(
+                              width: 50.0,
+                              height: 50.0,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
                               ),
-                        subtitle:
-                            snapshot.data[index].itemExplanation.length >= 34
-                                ? Text(snapshot.data[index].itemExplanation
-                                        .replaceAll('\n', '')
-                                        .substring(0, 34) +
-                                    '..')
-                                : Text(snapshot.data[index].itemExplanation
-                                    .replaceAll('\n', '')),
-                        onTap: () async {
-                          Item item;
-                          ItemModel itemModel =
-                              new ItemModel(snapshot.data[index].punchlistId);
-                          item = Item(
-                            punchlistId: snapshot.data[index].punchlistId,
-                            itemId: snapshot.data[index].itemId,
-                            imgName: snapshot.data[index].imgName,
-                            itemName: snapshot.data[index].itemName,
-                            itemExplanation:
-                                snapshot.data[index].itemExplanation,
-                            itemStatus: snapshot.data[index].itemStatus == "1"
-                                ? "0"
-                                : "1",
-                          );
-                          await itemModel.update(item);
-                          await setState(() {});
-                        }),
+                            ),
+                      subtitle:
+                          snapshot.data[index].itemExplanation.length >= 34
+                              ? Text(snapshot.data[index].itemExplanation
+                                      .replaceAll('\n', '')
+                                      .substring(0, 34) +
+                                  '..')
+                              : Text(snapshot.data[index].itemExplanation
+                                  .replaceAll('\n', '')),
+                      selected: false,
+                      value:
+                          snapshot.data[index].itemStatus == "1" ? true : false,
+                      onChanged: (value) async {
+                        Item item;
+                        ItemModel itemModel =
+                            new ItemModel(snapshot.data[index].punchlistId);
+                        item = Item(
+                          punchlistId: snapshot.data[index].punchlistId,
+                          itemId: snapshot.data[index].itemId,
+                          imgName: snapshot.data[index].imgName,
+                          itemName: snapshot.data[index].itemName,
+                          itemExplanation: snapshot.data[index].itemExplanation,
+                          itemStatus: snapshot.data[index].itemStatus == "1"
+                              ? "0"
+                              : "1",
+                        );
+                        await itemModel.update(item);
+                        await setState(() {});
+                      },
+                    ),
                   ),
                 );
               },
