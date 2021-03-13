@@ -78,8 +78,10 @@ class _TopPunchlistPageState extends State {
                             color: Colors.blue,
                             icon: Icons.mail,
                             onTap: () async {
+                              String pdfPath;
                               await getPdfPath(snapshot.data[index])
-                                  .then((pdfPath) {
+                                  .then((value) {
+                                pdfPath = value;
                                 email = Email(
                                   body:
                                       '\n\n\n\n\n報告までできる施工管理アプリ「パンチリスト」で作成されました。\n'
@@ -88,6 +90,8 @@ class _TopPunchlistPageState extends State {
                                 );
                               });
                               await FlutterEmailSender.send(email);
+                              final dir = Directory(pdfPath);
+                              dir.deleteSync(recursive: true);
                             },
                           ),
                         ],
