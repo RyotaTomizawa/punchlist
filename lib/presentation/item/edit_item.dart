@@ -67,13 +67,21 @@ class ChangeForm extends StatefulWidget {
     }
 
     return _ChangeFormState(selectedPunchlistElement, selectedItem, itemId,
-        imageFile, imgName, itemStatus, _active);
+        imageFile, imgName, imgName, itemStatus, _active);
   }
 }
 
 class _ChangeFormState extends State<ChangeForm> {
-  _ChangeFormState(this.selectedPunchlistElement, this.selectedItem,
-      this.itemId, this.imageFile, this.imgName, this.itemStatus, this._active);
+  _ChangeFormState(
+    this.selectedPunchlistElement,
+    this.selectedItem,
+    this.itemId,
+    this.imageFile,
+    this.imgName,
+    this._imgName,
+    this.itemStatus,
+    this._active,
+  );
 
   final _formKey = GlobalKey<FormState>();
   PunchlistElement selectedPunchlistElement;
@@ -81,13 +89,13 @@ class _ChangeFormState extends State<ChangeForm> {
   String itemId;
   File imageFile;
   String imgName;
+  final String _imgName;
   String itemName = '';
   String itemExplanation = '';
   String itemStatus;
   bool _active;
   PermissionStatus _permissionStatus = PermissionStatus.undetermined;
   FileController fc = new FileController();
-
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -169,11 +177,11 @@ class _ChangeFormState extends State<ChangeForm> {
                     title: Text('対応完了'),
                   ),
                   RaisedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        _formKey.currentState.save();
-                        _submission(selectedItem);
-                        Navigator.pushNamedAndRemoveUntil(
+                        await _formKey.currentState.save();
+                        await _submission(selectedItem);
+                        await Navigator.pushNamedAndRemoveUntil(
                             context, '/itemMain', ModalRoute.withName('/'),
                             arguments: selectedPunchlistElement);
                       }
@@ -202,7 +210,7 @@ class _ChangeFormState extends State<ChangeForm> {
         return _showDialog();
       case PermissionStatus.granted:
         print('カメラの使用許可');
-        _getFromDevice(source);
+        _saveAndGetFromDevice(source);
         break;
       default:
         return _showDialog();
@@ -226,7 +234,7 @@ class _ChangeFormState extends State<ChangeForm> {
         return _showDialog();
       case PermissionStatus.granted:
         print('ギャラリーの使用許可');
-        _saveAndGetFromDevice(source);
+        _getFromDevice(source);
         break;
       default:
         return _showDialog();
@@ -263,7 +271,7 @@ class _ChangeFormState extends State<ChangeForm> {
       return;
     }
     await fc.saveImageGallery(imageFile);
-    imgName = await fc.saveLocalImage(imageFile);
+    this.imageFile = imageFile;
     setState(() {
       this.imageFile = imageFile;
     });
@@ -274,27 +282,33 @@ class _ChangeFormState extends State<ChangeForm> {
     if (imageFile == null) {
       return;
     }
-    imgName = await fc.saveLocalImage(imageFile);
+    this.imageFile = imageFile;
     setState(() {
       this.imageFile = imageFile;
     });
   }
 
   void _changeSwitch(bool e) => setState(() {
-        _active = e;
-        itemStatus = _active ? '1' : '0';
+        this._active = e;
+        this.itemStatus = this._active ? '1' : '0';
       });
 
-  Future<void> _submission(Item selectedItem) async {
+  void _submission(Item selectedItem) async {
     Item item;
     ItemModel itemModel = new ItemModel(selectedItem.punchlistId);
+    this.imgName = await fc.saveLocalImage(imageFile);
+    if (this._imgName != this.imgName && this._imgName != '') {
+      final path = await DBProvider.documentsDirectory.path;
+      final dir = Directory('$path/$_imgName');
+      dir.deleteSync(recursive: true);
+    }
     item = Item(
       punchlistId: selectedItem.punchlistId,
-      itemId: itemId,
-      imgName: imgName,
-      itemName: itemName,
-      itemExplanation: itemExplanation,
-      itemStatus: itemStatus,
+      itemId: this.itemId,
+      imgName: this.imgName,
+      itemName: this.itemName,
+      itemExplanation: this.itemExplanation,
+      itemStatus: this.itemStatus,
     );
     await itemModel.update(item);
   }
