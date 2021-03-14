@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:punch_list_app/domain/item.dart';
+import 'package:punch_list_app/presentation/control/db_provider.dart';
 import 'package:punch_list_app/presentation/model/item_model.dart';
 import 'package:punch_list_app/services/admob.dart';
 import '../../domain/punchlist_element.dart';
@@ -143,11 +144,11 @@ class _ChangeFormState extends State<ChangeForm> {
                     title: Text('対応完了'),
                   ),
                   RaisedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState.validate()) {
-                        _formKey.currentState.save();
-                        _submission(selectedPunchlistElement);
-                        Navigator.pushNamedAndRemoveUntil(
+                        await _formKey.currentState.save();
+                        await _submission(selectedPunchlistElement);
+                        await Navigator.pushNamedAndRemoveUntil(
                             context, '/itemMain', ModalRoute.withName('/'),
                             arguments: selectedPunchlistElement);
                       }
@@ -237,7 +238,7 @@ class _ChangeFormState extends State<ChangeForm> {
       return;
     }
     await fc.saveImageGallery(imageFile);
-    imgName = await fc.saveLocalImage(imageFile);
+    this.imageFile = imageFile;
     setState(() {
       this.imageFile = imageFile;
     });
@@ -248,7 +249,7 @@ class _ChangeFormState extends State<ChangeForm> {
     if (imageFile == null) {
       return;
     }
-    imgName = await fc.saveLocalImage(imageFile);
+    this.imageFile = imageFile;
     setState(() {
       this.imageFile = imageFile;
     });
@@ -257,14 +258,15 @@ class _ChangeFormState extends State<ChangeForm> {
   Future<void> _submission(PunchlistElement selectedPunchlistElement) async {
     Item item;
     ItemModel itemModel = new ItemModel(selectedPunchlistElement.punchlistId);
-    itemStatus = _active ? '1' : '0';
+    this.itemStatus = this._active ? '1' : '0';
+    this.imgName = await fc.saveLocalImage(imageFile);
     item = Item(
       punchlistId: selectedPunchlistElement.punchlistId,
-      itemId: itemId,
-      imgName: imgName,
-      itemName: itemName,
-      itemExplanation: itemExplanation,
-      itemStatus: itemStatus,
+      itemId: this.itemId,
+      imgName: this.imgName,
+      itemName: this.itemName,
+      itemExplanation: this.itemExplanation,
+      itemStatus: this.itemStatus,
     );
     await itemModel.create(item);
   }

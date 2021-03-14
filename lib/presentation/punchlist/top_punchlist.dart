@@ -380,9 +380,9 @@ class _TopPunchlistPageState extends State {
                         .getAllItemByPunchlistId(punchlistId);
                     final path = await DBProvider.documentsDirectory.path;
                     for (var item in itemlist) {
-                      String imageName = item.imgName;
-                      if (imageName != "") {
-                        final dir = Directory('$path/$imageName');
+                      String imgName = item.imgName;
+                      if (imgName != "") {
+                        final dir = Directory('$path/$imgName');
                         dir.deleteSync(recursive: true);
                       }
                     }
