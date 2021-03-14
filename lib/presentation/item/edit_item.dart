@@ -296,7 +296,9 @@ class _ChangeFormState extends State<ChangeForm> {
   void _submission(Item selectedItem) async {
     Item item;
     ItemModel itemModel = new ItemModel(selectedItem.punchlistId);
-    this.imgName = await fc.saveLocalImage(imageFile);
+    if (this.imageFile != null) {
+      this.imgName = await fc.saveLocalImage(imageFile);
+    }
     if (this._imgName != this.imgName && this._imgName != '') {
       final path = await DBProvider.documentsDirectory.path;
       final dir = Directory('$path/$_imgName');
