@@ -28,15 +28,15 @@ class TutorialPage extends StatelessWidget {
   final pages = [
     PageModel(
         color: const Color(0xFF95cedd),
-        imageAssetPath: 'assets/img1.png',
+        imageAssetPath: 'assets/imgTutorial1.png',
         title: 'パンチリスト画面',
         body: 'タップ:タスク画面へ遷移\n'
             '左スワイプ:パンチリスト編集\n'
             '右スワイプ:テンプレートメール送信',
         doAnimateImage: true),
     PageModel(
-        color: const Color(0xFF9B90BC),
-        imageAssetPath: 'assets/img2.png',
+        color: const Color(0xFF90CAF9),
+        imageAssetPath: 'assets/imgTutorial2.png',
         title: 'タスク画面',
         body: 'タップ:完了/未完了 切替\n'
             '右スワイプ:タスク編集',

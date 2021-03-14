@@ -36,12 +36,11 @@ dev_dependencies:
 flutter_icons:
   android: true
   ios: true
-  image_path: "assets/icon/icon.png"
+  image_path: "lib/image/icon.png"
 flutter:
   assets:
-    - assets/img1.png
-    - assets/img2.png
-    - assets/icon.png
+    - assets/imgTutorial1.png
+    - assets/imgTutorial2.png
     - assets/font/ipagp.ttf
   uses-material-design: true
 

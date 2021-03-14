@@ -259,7 +259,9 @@ class _ChangeFormState extends State<ChangeForm> {
     Item item;
     ItemModel itemModel = new ItemModel(selectedPunchlistElement.punchlistId);
     this.itemStatus = this._active ? '1' : '0';
-    this.imgName = await fc.saveLocalImage(imageFile);
+    if (this.imageFile != null) {
+      this.imgName = await fc.saveLocalImage(imageFile);
+    }
     item = Item(
       punchlistId: selectedPunchlistElement.punchlistId,
       itemId: this.itemId,
