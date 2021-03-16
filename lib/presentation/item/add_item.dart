@@ -56,7 +56,8 @@ class _ChangeFormState extends State<ChangeForm> {
   String itemExplanation = '';
   String itemStatus = '0';
   bool _active = false;
-  PermissionStatus _permissionStatus = PermissionStatus.undetermined;
+  PermissionStatus _permissionStatusCamera = PermissionStatus.undetermined;
+  PermissionStatus _permissionStatusGallery = PermissionStatus.undetermined;
   FileController fc = new FileController();
 
   void _changeSwitch(bool e) => setState(() => _active = e);
@@ -86,15 +87,14 @@ class _ChangeFormState extends State<ChangeForm> {
                           child: RaisedButton(
                         child: Text('撮影'),
                         onPressed: () {
-                          _checkPermissionStatus(ImageSource.camera);
+                          _checkCameraPermissionStatus(ImageSource.camera);
                         },
                       )),
                       Container(
                           child: RaisedButton(
                         child: Text('アルバム'),
                         onPressed: () {
-                          //_checkGalleryPermissionStatus(
-                          _checkGalleryPermissionStatus(ImageSource.gallery);
+                          _checkPermissionStatusGallery(ImageSource.gallery);
                         },
                       )),
                     ],
@@ -160,12 +160,12 @@ class _ChangeFormState extends State<ChangeForm> {
     );
   }
 
-  _checkPermissionStatus(ImageSource source) async {
-    if (_permissionStatus == PermissionStatus.undetermined) {
+  _checkCameraPermissionStatus(ImageSource source) async {
+    if (_permissionStatusCamera == PermissionStatus.undetermined) {
       print('カメラの使用許可/不許可が未選択');
-      _permissionStatus = await Permission.camera.request();
+      _permissionStatusCamera = await Permission.camera.request();
     }
-    switch (_permissionStatus) {
+    switch (_permissionStatusCamera) {
       case PermissionStatus.permanentlyDenied:
         print('カメラの権限が手動で設定しない限り不許可');
         return _showDialog();
@@ -184,12 +184,12 @@ class _ChangeFormState extends State<ChangeForm> {
     }
   }
 
-  _checkGalleryPermissionStatus(ImageSource source) async {
-    if (_permissionStatus == PermissionStatus.undetermined) {
+  _checkPermissionStatusGallery(ImageSource source) async {
+    if (_permissionStatusGallery == PermissionStatus.undetermined) {
       print('ギャラリーの使用許可/不許可が未選択');
-      _permissionStatus = await Permission.photos.request();
+      _permissionStatusGallery = await Permission.photos.request();
     }
-    switch (_permissionStatus) {
+    switch (_permissionStatusGallery) {
       case PermissionStatus.permanentlyDenied:
         print('ギャラリーの権限が手動で設定しない限り不許可');
         return _showDialog();
