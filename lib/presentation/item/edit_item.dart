@@ -280,6 +280,7 @@ class _ChangeFormState extends State<ChangeForm> {
     }
     await fc.saveImageGallery(imageFile);
     this.imageFile = imageFile;
+    this.imgName = 'changed';
     setState(() {
       this.imageFile = imageFile;
     });
@@ -291,6 +292,7 @@ class _ChangeFormState extends State<ChangeForm> {
       return;
     }
     this.imageFile = imageFile;
+    this.imgName = 'changed';
     setState(() {
       this.imageFile = imageFile;
     });
@@ -333,7 +335,7 @@ class _ChangeFormState extends State<ChangeForm> {
     Item item;
     ItemModel itemModel = new ItemModel(selectedItem.punchlistId);
     this.itemStatus = _value.toInt().toString();
-    if (this.imageFile != null) {
+    if (this.imageFile != null && this._imgName != this.imgName) {
       this.imgName = await fc.saveLocalImage(imageFile);
     }
     item = Item(
