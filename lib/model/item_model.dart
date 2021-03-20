@@ -1,6 +1,6 @@
 import 'dart:async';
 import '../control/db_provider.dart';
-import '../../domain/item.dart';
+import '../domain/item.dart';
 
 class ItemModel {
   final _itemController = StreamController<List<Item>>();

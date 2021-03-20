@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:punch_list_app/domain/item.dart';
 import 'package:punch_list_app/domain/punchlist_element.dart';
-import 'package:punch_list_app/presentation/model/punchlist_model.dart';
+import 'package:punch_list_app/model/punchlist_model.dart';
 import 'package:punch_list_app/presentation/punchlist/edit_punchlist.dart';
 import 'package:punch_list_app/services/admob.dart';
 import 'package:punch_list_app/tutorial/tutorialPage.dart';
@@ -14,7 +14,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
 import 'dart:async';
-import 'package:punch_list_app/presentation/control/db_provider.dart';
+import 'package:punch_list_app/control/db_provider.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -95,7 +95,7 @@ class _TopPunchlistPageState extends State {
                                   attachmentPaths: [pdfPath],
                                 );
                               });
-                              await FlutterEmailSender.send(email);
+                              //await FlutterEmailSender.send(email);
                               final dir = Directory(pdfPath);
                               dir.deleteSync(recursive: true);
                             },
@@ -266,19 +266,40 @@ class _TopPunchlistPageState extends State {
     return pw.Column(
       crossAxisAlignment: pw.CrossAxisAlignment.start,
       children: <pw.Widget>[
-        pw.Text(
-          punchlistName,
-          style: pw.TextStyle(font: ttf, fontSize: 20),
+        pw.Container(
+          color: PdfColors.blue600,
+          width: double.infinity,
+          child: pw.Align(
+            alignment: pw.Alignment.centerRight,
+            child: pw.Text(
+              createDate,
+              style:
+                  pw.TextStyle(font: ttf, fontSize: 10, color: PdfColors.white),
+            ),
+          ),
         ),
-        pw.Text(
-          "パンチリスト作成日　：　" + createDate,
-          style: pw.TextStyle(font: ttf, fontSize: 10),
+        pw.Container(
+          color: PdfColors.blue,
+          width: double.infinity,
+          padding: pw.EdgeInsets.only(top: 5, bottom: 5),
+          child: pw.Text(
+            punchlistName,
+            style: pw.TextStyle(
+              font: ttf,
+              fontSize: 30,
+              color: PdfColors.white,
+            ),
+          ),
         ),
-        pw.Text(
-          explanationPunchlist,
-          style: pw.TextStyle(font: ttf, fontSize: 10),
+        pw.Container(
+          padding: pw.EdgeInsets.only(top: 5),
+          child: pw.Text(
+            explanationPunchlist,
+            style: pw.TextStyle(font: ttf, fontSize: 10),
+          ),
         ),
         pw.Divider(
+          color: PdfColors.grey,
           height: 20,
         ),
       ],
@@ -307,33 +328,41 @@ class _TopPunchlistPageState extends State {
       itemPdfList.add(pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: <pw.Widget>[
-          item.imgName != ''
-              ? layoutImg(imgPath)
-              : pw.Text(
-                  '画像がありません',
+          pw.SizedBox(
+            width: 100,
+            height: 100,
+            child: item.imgName != ''
+                ? layoutImg(imgPath)
+                : pw.Text(
+                    '画像がありません',
+                    style: pw.TextStyle(
+                        font: ttf, fontSize: 10, color: PdfColors.grey),
+                  ),
+          ),
+          pw.Container(
+            padding: pw.EdgeInsets.only(left: 5, right: 5),
+            child: pw.Column(
+              crossAxisAlignment: pw.CrossAxisAlignment.start,
+              children: <pw.Widget>[
+                pw.Text(
+                  itemName,
                   style: pw.TextStyle(font: ttf, fontSize: 15),
                 ),
-          pw.Column(
-            crossAxisAlignment: pw.CrossAxisAlignment.start,
-            children: <pw.Widget>[
-              pw.Text(
-                itemName,
-                style: pw.TextStyle(font: ttf, fontSize: 15),
-              ),
-              pw.Text(
-                itemStatus,
-                style: pw.TextStyle(
-                    font: ttf,
-                    fontSize: 10,
-                    color: item.itemStatus == '1'
-                        ? PdfColors.green
-                        : PdfColors.redAccent),
-              ),
-              pw.Text(
-                itemExplanation,
-                style: pw.TextStyle(font: ttf, fontSize: 10),
-              ),
-            ],
+                pw.Text(
+                  itemStatus,
+                  style: pw.TextStyle(
+                      font: ttf,
+                      fontSize: 10,
+                      color: item.itemStatus == '1'
+                          ? PdfColors.green
+                          : PdfColors.redAccent),
+                ),
+                pw.Text(
+                  itemExplanation,
+                  style: pw.TextStyle(font: ttf, fontSize: 10),
+                ),
+              ],
+            ),
           ),
         ],
       ));

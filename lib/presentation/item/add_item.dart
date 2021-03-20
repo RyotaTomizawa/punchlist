@@ -1,14 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:punch_list_app/domain/item.dart';
-import 'package:punch_list_app/presentation/control/db_provider.dart';
-import 'package:punch_list_app/presentation/model/item_model.dart';
+import 'package:punch_list_app/control/db_provider.dart';
+import 'package:punch_list_app/model/item_model.dart';
 import 'package:punch_list_app/services/admob.dart';
 import '../../domain/punchlist_element.dart';
 import 'dart:async';
 import 'package:uuid/uuid.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:punch_list_app/presentation/control/file_controller.dart';
+import 'package:punch_list_app/control/file_controller.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 

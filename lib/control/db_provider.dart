@@ -3,8 +3,8 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:sqflite/sqlite_api.dart';
-import '../../domain/punchlist_element.dart';
-import '../../domain/item.dart';
+import '../domain/punchlist_element.dart';
+import '../domain/item.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
@@ -49,7 +49,7 @@ class DBProvider {
             "\n合計20脚の椅子を設営する"
             "\n内訳：白が10個、黒が10個"
             "\n白いテーブルには白い椅子"
-            "\n黒いテーブルには黒いテーブル"
+            "\n黒いテーブルには黒い椅子"
             "\n作業員が必要な場合は事前にメールで募る",
         itemStatus: "1",
       );
