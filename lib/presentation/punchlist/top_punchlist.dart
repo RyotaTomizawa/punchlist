@@ -12,7 +12,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'package:punch_list_app/control/db_provider.dart';
 import 'package:admob_flutter/admob_flutter.dart';
@@ -324,7 +323,7 @@ class _TopPunchlistPageState extends State {
       String imgPath = DBProvider.documentsDirectory.path + "/" + item.imgName;
       String itemName = item.itemName;
       String itemExplanation = item.itemExplanation;
-      String itemStatus = item.itemStatus == '1' ? '作業完了' : '作業未完了';
+      String itemStatus = item.itemStatus;
       itemPdfList.add(pw.Row(
         crossAxisAlignment: pw.CrossAxisAlignment.start,
         children: <pw.Widget>[
@@ -348,14 +347,11 @@ class _TopPunchlistPageState extends State {
                   itemName,
                   style: pw.TextStyle(font: ttf, fontSize: 15),
                 ),
-                pw.Text(
-                  itemStatus,
-                  style: pw.TextStyle(
-                      font: ttf,
-                      fontSize: 10,
-                      color: item.itemStatus == '1'
-                          ? PdfColors.green
-                          : PdfColors.redAccent),
+                pw.Image(
+                  pw.MemoryImage(
+                      File(getProressImgPath(itemStatus)).readAsBytesSync()),
+                  height: 100,
+                  width: 100,
                 ),
                 pw.Text(
                   itemExplanation,
@@ -374,6 +370,29 @@ class _TopPunchlistPageState extends State {
       );
     }
     return itemPdfList;
+  }
+
+  static String getProressImgPath(String itemStatus) {
+    switch (itemStatus) {
+      case '0':
+        return 'punch_list_app/lib/image/0_Progress.png';
+        break;
+      case '1':
+        return '25_Progress.png';
+        break;
+      case '2':
+        return '50_Progress.png';
+        break;
+      case '3':
+        return 'package:punch_list_app/lib/image/75_Progress.png';
+        break;
+      case '4':
+        return '100_Progress.png';
+        break;
+      default:
+        return '0_Progress.png';
+        break;
+    }
   }
 
   static pw.Widget layoutImg(String imgPath) {
