@@ -26,7 +26,7 @@ class _EditItemPageState extends State {
     String itemStatus = selectedItem.itemStatus;
     String itemId = selectedItem.itemId;
     String imgName = selectedItem.imgName;
-    bool _active = itemStatus == '1' ? true : false;
+    double _value = double.parse(selectedItem.itemStatus);
     return Scaffold(
       resizeToAvoidBottomInset: true,
       appBar: AppBar(
@@ -34,7 +34,7 @@ class _EditItemPageState extends State {
       ),
       body: Container(
         child: ChangeForm(selectedPunchListElement, selectedItem, itemId,
-            imgName, itemStatus, _active),
+            imgName, itemStatus, _value),
       ),
       bottomNavigationBar: AdmobBanner(
         adUnitId: AdMobService().getBannerAdUnitId(),
@@ -56,10 +56,10 @@ class ChangeForm extends StatefulWidget {
   String itemId;
   String imgName;
   String itemStatus;
-  bool _active;
+  double _value;
 
   ChangeForm(this.selectedPunchlistElement, this.selectedItem, this.itemId,
-      this.imgName, this.itemStatus, this._active);
+      this.imgName, this.itemStatus, this._value);
 
   _ChangeFormState createState() {
     if (imgName != "") {
@@ -67,7 +67,7 @@ class ChangeForm extends StatefulWidget {
     }
 
     return _ChangeFormState(selectedPunchlistElement, selectedItem, itemId,
-        imageFile, imgName, imgName, itemStatus, _active);
+        imageFile, imgName, imgName, itemStatus, _value);
   }
 }
 
@@ -80,7 +80,7 @@ class _ChangeFormState extends State<ChangeForm> {
     this.imgName,
     this._imgName,
     this.itemStatus,
-    this._active,
+    this._value,
   );
 
   final _formKey = GlobalKey<FormState>();
@@ -93,7 +93,9 @@ class _ChangeFormState extends State<ChangeForm> {
   String itemName = '';
   String itemExplanation = '';
   String itemStatus;
-  bool _active;
+  double _value;
+  double _startValue;
+  double _endValue;
   PermissionStatus _permissionStatusCamera = PermissionStatus.undetermined;
   PermissionStatus _permissionStatusGallery = PermissionStatus.undetermined;
   FileController fc = new FileController();
@@ -168,14 +170,18 @@ class _ChangeFormState extends State<ChangeForm> {
                       itemExplanation = value;
                     },
                   ),
-                  SwitchListTile(
-                    value: _active,
-                    activeColor: Colors.blue,
-                    activeTrackColor: Colors.green,
-                    inactiveThumbColor: Colors.blue,
-                    inactiveTrackColor: Colors.grey,
-                    onChanged: _changeSwitch,
-                    title: Text('対応完了'),
+                  Text('進捗率', style: TextStyle(fontSize: 16)),
+                  Slider(
+                    label: convertProgress(),
+                    min: 0,
+                    max: 4,
+                    value: _value,
+                    activeColor: Colors.green,
+                    inactiveColor: Colors.grey,
+                    onChanged: _changeSlider,
+                    onChangeStart: _startSlider,
+                    onChangeEnd: _endSlider,
+                    divisions: 4,
                   ),
                   RaisedButton(
                     onPressed: () async {
@@ -289,14 +295,43 @@ class _ChangeFormState extends State<ChangeForm> {
     });
   }
 
-  void _changeSwitch(bool e) => setState(() {
-        this._active = e;
-        this.itemStatus = this._active ? '1' : '0';
+  void _changeSlider(double e) => setState(() {
+        _value = e;
       });
+  void _startSlider(double e) => setState(() {
+        _startValue = e;
+      });
+  void _endSlider(double e) => setState(() {
+        _endValue = e;
+      });
+  String convertProgress() {
+    String progress = _value.toInt().toString();
+    switch (progress) {
+      case '0':
+        return '0%';
+        break;
+      case '1':
+        return '25%';
+        break;
+      case '2':
+        return '50%';
+        break;
+      case '3':
+        return '75%';
+        break;
+      case '4':
+        return '100%';
+        break;
+      default:
+        return '0%';
+        break;
+    }
+  }
 
   void _submission(Item selectedItem) async {
     Item item;
     ItemModel itemModel = new ItemModel(selectedItem.punchlistId);
+    this.itemStatus = _value.toInt().toString();
     if (this.imageFile != null) {
       this.imgName = await fc.saveLocalImage(imageFile);
     }
