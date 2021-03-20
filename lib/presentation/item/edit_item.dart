@@ -188,6 +188,7 @@ class _ChangeFormState extends State<ChangeForm> {
                       if (_formKey.currentState.validate()) {
                         await _formKey.currentState.save();
                         await _submission(selectedItem);
+                        await deleteOldFile();
                         await Navigator.pushNamedAndRemoveUntil(
                             context, '/itemMain', ModalRoute.withName('/'),
                             arguments: selectedPunchlistElement);
@@ -335,11 +336,6 @@ class _ChangeFormState extends State<ChangeForm> {
     if (this.imageFile != null) {
       this.imgName = await fc.saveLocalImage(imageFile);
     }
-    if (this._imgName != this.imgName && this._imgName != '') {
-      final path = await DBProvider.documentsDirectory.path;
-      final dir = Directory('$path/$_imgName');
-      dir.deleteSync(recursive: true);
-    }
     item = Item(
       punchlistId: selectedItem.punchlistId,
       itemId: this.itemId,
@@ -349,5 +345,13 @@ class _ChangeFormState extends State<ChangeForm> {
       itemStatus: this.itemStatus,
     );
     await itemModel.update(item);
+  }
+
+  void deleteOldFile() async {
+    if (this._imgName != this.imgName && this._imgName != '') {
+      final path = await DBProvider.documentsDirectory.path;
+      final dir = Directory('$path/$_imgName');
+      await dir.deleteSync(recursive: true);
+    }
   }
 }
