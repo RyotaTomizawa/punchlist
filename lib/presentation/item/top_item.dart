@@ -2,9 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:punch_list_app/domain/item.dart';
 import 'package:punch_list_app/domain/punchlist_element.dart';
-import 'package:punch_list_app/presentation/control/db_provider.dart';
+import 'package:punch_list_app/control/db_provider.dart';
 import 'package:punch_list_app/services/admob.dart';
-import '../model/item_model.dart';
+import '../../model/item_model.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 

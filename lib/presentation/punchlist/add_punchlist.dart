@@ -3,7 +3,7 @@ import 'package:punch_list_app/services/admob.dart';
 import '../../domain/punchlist_element.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
-import '../model/punchlist_model.dart';
+import '../../model/punchlist_model.dart';
 import 'package:uuid/uuid.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 
