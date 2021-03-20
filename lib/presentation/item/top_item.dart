@@ -63,7 +63,9 @@ class ChangeItemlist extends StatefulWidget {
 class _ChangeItemlist extends State<ChangeItemlist> {
   @override
   PunchlistElement selectedPunchlistElement;
+
   _ChangeItemlist(this.selectedPunchlistElement);
+
   Widget build(BuildContext context) {
     return Container(
       color: Colors.grey[50],
@@ -88,19 +90,7 @@ class _ChangeItemlist extends State<ChangeItemlist> {
               itemBuilder: (context, int index) {
                 return Slidable(
                   actionPane: SlidableScrollActionPane(),
-                  // 右側に表示するWidget
                   secondaryActions: [
-                    IconSlideAction(
-                      caption: '編集',
-                      color: Colors.yellow,
-                      icon: Icons.edit,
-                      onTap: () {
-                        Navigator.pushNamed(context, '/editItem', arguments: {
-                          "selectedItem": snapshot.data[index],
-                          "selectedPunchListElement": selectedPunchlistElement
-                        });
-                      },
-                    ),
                     IconSlideAction(
                       caption: '削除',
                       color: Colors.red,
@@ -113,59 +103,44 @@ class _ChangeItemlist extends State<ChangeItemlist> {
                   child: Container(
                     color: Colors.white,
                     padding: EdgeInsets.only(bottom: 5.0),
-                    child: CheckboxListTile(
-                      tristate: true,
-                      title: Text(snapshot.data[index].itemName),
-                      secondary: snapshot.data[index].imgName != ''
-                          ? Container(
-                              width: 50.0,
-                              height: 50.0,
-                              decoration: BoxDecoration(
+                    child: ListTile(
+                        title: Text(snapshot.data[index].itemName),
+                        leading: snapshot.data[index].imgName != ''
+                            ? Container(
+                                width: 50.0,
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                        fit: BoxFit.fill,
+                                        image: AssetImage(
+                                            DBProvider.documentsDirectory.path +
+                                                "/" +
+                                                snapshot.data[index].imgName))),
+                              )
+                            : Container(
+                                width: 50.0,
+                                height: 50.0,
+                                decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                      fit: BoxFit.fill,
-                                      image: AssetImage(
-                                          DBProvider.documentsDirectory.path +
-                                              "/" +
-                                              snapshot.data[index].imgName))),
-                            )
-                          : Container(
-                              width: 50.0,
-                              height: 50.0,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                border: Border.all(color: Colors.black45),
+                                  border: Border.all(color: Colors.black45),
+                                ),
                               ),
-                            ),
-                      subtitle:
-                          snapshot.data[index].itemExplanation.length >= 34
-                              ? Text(snapshot.data[index].itemExplanation
-                                      .replaceAll('\n', '')
-                                      .substring(0, 34) +
-                                  '..')
-                              : Text(snapshot.data[index].itemExplanation
-                                  .replaceAll('\n', '')),
-                      selected: false,
-                      value:
-                          snapshot.data[index].itemStatus == "1" ? true : false,
-                      onChanged: (value) async {
-                        Item item;
-                        ItemModel itemModel =
-                            new ItemModel(snapshot.data[index].punchlistId);
-                        item = Item(
-                          punchlistId: snapshot.data[index].punchlistId,
-                          itemId: snapshot.data[index].itemId,
-                          imgName: snapshot.data[index].imgName,
-                          itemName: snapshot.data[index].itemName,
-                          itemExplanation: snapshot.data[index].itemExplanation,
-                          itemStatus: snapshot.data[index].itemStatus == "1"
-                              ? "0"
-                              : "1",
-                        );
-                        await itemModel.update(item);
-                        await setState(() {});
-                      },
-                    ),
+                        subtitle:
+                            snapshot.data[index].itemExplanation.length >= 28
+                                ? Text(snapshot.data[index].itemExplanation
+                                        .replaceAll('\n', '')
+                                        .substring(0, 28) +
+                                    '..')
+                                : Text(snapshot.data[index].itemExplanation
+                                    .replaceAll('\n', '')),
+                        trailing: showProgress(snapshot.data[index].itemStatus),
+                        onTap: () {
+                          Navigator.pushNamed(context, '/editItem', arguments: {
+                            "selectedItem": snapshot.data[index],
+                            "selectedPunchListElement": selectedPunchlistElement
+                          });
+                        }),
                   ),
                 );
               },
@@ -205,5 +180,28 @@ class _ChangeItemlist extends State<ChangeItemlist> {
             ],
           );
         });
+  }
+
+  Widget showProgress(String itemStatus) {
+    switch (itemStatus) {
+      case '0':
+        return Image.asset('assets/0_Progress.png');
+        break;
+      case '1':
+        return Image.asset('assets/25_Progress.png');
+        break;
+      case '2':
+        return Image.asset('assets/50_Progress.png');
+        break;
+      case '3':
+        return Image.asset('assets/75_Progress.png');
+        break;
+      case '4':
+        return Image.asset('assets/100_Progress.png');
+        break;
+      default:
+        return Image.asset('assets/0_Progress.png');
+        break;
+    }
   }
 }

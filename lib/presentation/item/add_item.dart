@@ -54,13 +54,13 @@ class _ChangeFormState extends State<ChangeForm> {
   String imgName = '';
   String itemName = '';
   String itemExplanation = '';
-  String itemStatus = '0';
-  bool _active = false;
+  String itemStatus = '';
   PermissionStatus _permissionStatusCamera = PermissionStatus.undetermined;
   PermissionStatus _permissionStatusGallery = PermissionStatus.undetermined;
   FileController fc = new FileController();
-
-  void _changeSwitch(bool e) => setState(() => _active = e);
+  double _value = 0;
+  double _startValue;
+  double _endValue;
 
   Widget build(BuildContext context) {
     PunchlistElement selectedPunchlistElement =
@@ -70,15 +70,15 @@ class _ChangeFormState extends State<ChangeForm> {
       child: Form(
           key: _formKey,
           child: SingleChildScrollView(
-              padding: const EdgeInsets.all(30.0),
+              padding: const EdgeInsets.all(30),
               child: Column(
                 children: <Widget>[
                   (imageFile == null)
                       ? Icon(Icons.no_sim)
                       : Image.memory(
                           imageFile.readAsBytesSync(),
-                          height: 200.0,
-                          width: 200.0,
+                          height: 200,
+                          width: 200,
                         ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -119,7 +119,7 @@ class _ChangeFormState extends State<ChangeForm> {
                     maxLength: 200,
                     maxLengthEnforced: true,
                     decoration: const InputDecoration(
-                      labelText: 'アイテム概要',
+                      labelText: 'アイテム概要 *',
                     ),
                     validator: (String value) {
                       if ('\n'.allMatches(value).length > 7) {
@@ -134,14 +134,18 @@ class _ChangeFormState extends State<ChangeForm> {
                       itemExplanation = value;
                     },
                   ),
-                  SwitchListTile(
-                    value: _active,
-                    activeColor: Colors.blue,
-                    activeTrackColor: Colors.green,
-                    inactiveThumbColor: Colors.blue,
-                    inactiveTrackColor: Colors.grey,
-                    onChanged: _changeSwitch,
-                    title: Text('対応完了'),
+                  Text('進捗率', style: TextStyle(fontSize: 16)),
+                  Slider(
+                    label: convertProgress(),
+                    min: 0,
+                    max: 4,
+                    value: _value,
+                    activeColor: Colors.green,
+                    inactiveColor: Colors.grey,
+                    onChanged: _changeSlider,
+                    onChangeStart: _startSlider,
+                    onChangeEnd: _endSlider,
+                    divisions: 4,
                   ),
                   RaisedButton(
                     onPressed: () async {
@@ -255,10 +259,43 @@ class _ChangeFormState extends State<ChangeForm> {
     });
   }
 
+  void _changeSlider(double e) => setState(() {
+        _value = e;
+      });
+  void _startSlider(double e) => setState(() {
+        _startValue = e;
+      });
+  void _endSlider(double e) => setState(() {
+        _endValue = e;
+      });
+  String convertProgress() {
+    String progress = _value.toInt().toString();
+    switch (progress) {
+      case '0':
+        return '0%';
+        break;
+      case '1':
+        return '25%';
+        break;
+      case '2':
+        return '50%';
+        break;
+      case '3':
+        return '75%';
+        break;
+      case '4':
+        return '100%';
+        break;
+      default:
+        return '0%';
+        break;
+    }
+  }
+
   Future<void> _submission(PunchlistElement selectedPunchlistElement) async {
     Item item;
     ItemModel itemModel = new ItemModel(selectedPunchlistElement.punchlistId);
-    this.itemStatus = this._active ? '1' : '0';
+    this.itemStatus = _value.toInt().toString();
     if (this.imageFile != null) {
       this.imgName = await fc.saveLocalImage(imageFile);
     }
