@@ -153,9 +153,7 @@ class _ChangeFormState extends State<ChangeForm> {
   Future<void> _submission() async {
     PunchlistElement punchlistElement;
     PunchlistModel punchlistModel = new PunchlistModel();
-    String punchlistId = Uuid().v4();
     punchlistElement = new PunchlistElement(
-      punchlistId: punchlistId,
       punchlistName: punchlistName,
       createDate: createDate,
       explanationPunchlist: explanationPunchlist,

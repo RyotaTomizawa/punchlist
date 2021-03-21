@@ -1,6 +1,6 @@
 class Item {
-  String punchlistId;
-  String itemId;
+  int punchlistId;
+  int itemId;
   String imgName;
   String itemName;
   String itemExplanation;
@@ -16,8 +16,8 @@ class Item {
 
   factory Item.fromMap(Map<String, dynamic> json) {
     return Item(
-      punchlistId: json['punchlistId'] as String,
-      itemId: json['itemId'] as String,
+      punchlistId: json['punchlistId'] as int,
+      itemId: json['itemId'] as int,
       imgName: json['imgName'] as String,
       itemName: json['itemName'] as String,
       itemExplanation: json['itemExplanation'] as String,

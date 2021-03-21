@@ -6,16 +6,16 @@ class ItemModel {
   final _itemController = StreamController<List<Item>>();
   Stream<List<Item>> get itemStream => _itemController.stream;
 
-  ItemModel(String punchlistId) {
+  ItemModel(int punchlistId) {
     getItem(punchlistId);
   }
 
-  getItem(String punchlistId) async {
+  getItem(int punchlistId) async {
     _itemController.sink
         .add(await DBProvider.db.getAllItemByPunchlistId(punchlistId));
   }
 
-  Future<Stream<List<Item>>> getItemStream(String punchlistId) async {
+  Future<Stream<List<Item>>> getItemStream(int punchlistId) async {
     _itemController.sink
         .add(await DBProvider.db.getAllItemByPunchlistId(punchlistId));
     return itemStream;

@@ -1,5 +1,5 @@
 class PunchlistElement {
-  String punchlistId;
+  int punchlistId;
   String punchlistName;
   String createDate;
   String explanationPunchlist;
@@ -12,7 +12,7 @@ class PunchlistElement {
 
   factory PunchlistElement.fromMap(Map<String, dynamic> json) {
     return PunchlistElement(
-      punchlistId: json['punchlistId'] as String,
+      punchlistId: json['punchlistId'] as int,
       punchlistName: json['punchlistName'] as String,
       createDate: json['createDate'] as String,
       explanationPunchlist: json['explanationPunchlist'] as String,
