@@ -293,7 +293,7 @@ class _TopPunchlistPageState extends State {
         pw.Container(
           padding: pw.EdgeInsets.only(top: 5),
           child: pw.Text(
-            explanationPunchlist,
+            checkNewline(explanationPunchlist, 48),
             style: pw.TextStyle(font: ttf, fontSize: 10),
           ),
         ),
@@ -325,7 +325,7 @@ class _TopPunchlistPageState extends State {
       String itemExplanation = item.itemExplanation;
       String itemStatus = item.itemStatus;
       itemPdfList.add(pw.Row(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: <pw.Widget>[
           pw.SizedBox(
             width: 100,
@@ -338,7 +338,10 @@ class _TopPunchlistPageState extends State {
                         font: ttf, fontSize: 10, color: PdfColors.grey),
                   ),
           ),
-          pw.Container(
+          pw.Flexible(
+              child: pw.Container(
+            height: 100,
+            width: 260,
             padding: pw.EdgeInsets.only(left: 5, right: 5),
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -347,18 +350,19 @@ class _TopPunchlistPageState extends State {
                   itemName,
                   style: pw.TextStyle(font: ttf, fontSize: 15),
                 ),
-                pw.Image(
-                  pw.MemoryImage(
-                      File(getProressImgPath(itemStatus)).readAsBytesSync()),
-                  height: 100,
-                  width: 100,
-                ),
                 pw.Text(
-                  itemExplanation,
+                  checkNewline(itemExplanation, 28),
+                  softWrap: true,
                   style: pw.TextStyle(font: ttf, fontSize: 10),
                 ),
               ],
             ),
+          )),
+          pw.Image(
+            pw.MemoryImage(
+                File(getProressImgPath(itemStatus)).readAsBytesSync()),
+            height: 100,
+            width: 100,
           ),
         ],
       ));
@@ -372,25 +376,47 @@ class _TopPunchlistPageState extends State {
     return itemPdfList;
   }
 
+  static String checkNewline(String checkChar, int charLimits) {
+    List<String> checkCharList = checkChar.split("");
+    int i = 1;
+    String checkedChar = "";
+    for (var checkChar in checkCharList) {
+      if (checkChar == "\n") {
+        checkedChar += checkChar;
+        i = 1;
+        continue;
+      }
+      if (i == charLimits) {
+        checkChar += "\n";
+        checkedChar += checkChar;
+        i = 1;
+        continue;
+      }
+      checkedChar += checkChar;
+      i += 1;
+    }
+    return checkedChar;
+  }
+
   static String getProressImgPath(String itemStatus) {
     switch (itemStatus) {
       case '0':
-        return 'punch_list_app/lib/image/0_Progress.png';
+        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/0_Progress.png';
         break;
       case '1':
-        return '25_Progress.png';
+        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/25_Progress.png';
         break;
       case '2':
-        return '50_Progress.png';
+        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/50_Progress.png';
         break;
       case '3':
-        return 'package:punch_list_app/lib/image/75_Progress.png';
+        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/100_Progress.png';
         break;
       case '4':
-        return '100_Progress.png';
+        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/100_Progress.png';
         break;
       default:
-        return '0_Progress.png';
+        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/0_Progress.png';
         break;
     }
   }

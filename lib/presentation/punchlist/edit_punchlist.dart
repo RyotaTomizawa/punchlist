@@ -119,7 +119,7 @@ class _ChangeFormState extends State<ChangeForm> {
                       initialValue:
                           selectedPunchListElement.explanationPunchlist,
                       maxLines: 7,
-                      maxLength: 200,
+                      maxLength: 190,
                       keyboardType: TextInputType.multiline,
                       decoration: const InputDecoration(
                         labelText: 'パンチリスト概要',

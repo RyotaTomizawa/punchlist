@@ -153,7 +153,7 @@ class _ChangeFormState extends State<ChangeForm> {
                   TextFormField(
                     initialValue: selectedItem.itemExplanation,
                     maxLines: 7,
-                    maxLength: 200,
+                    maxLength: 190,
                     decoration: const InputDecoration(
                       labelText: 'アイテム概要',
                     ),
