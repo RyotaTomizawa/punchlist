@@ -30,7 +30,7 @@ class PunchlistModel {
     getPunchlist();
   }
 
-  delete(String punchlistId) {
+  delete(int punchlistId) {
     DBProvider.db.deletePunchlist(punchlistId);
     DBProvider.db.deleteItemByPunchlistId(punchlistId);
     getPunchlist();

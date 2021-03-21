@@ -434,7 +434,7 @@ class _TopPunchlistPageState extends State {
     }
   }
 
-  _showDialog(String punchlistId) {
+  _showDialog(int punchlistId) {
     showDialog<bool>(
         context: context,
         builder: (BuildContext context) {

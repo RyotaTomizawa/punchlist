@@ -14,8 +14,8 @@ class DBProvider {
   static final DBProvider db = DBProvider._();
   static Database _database;
   static Directory documentsDirectory;
-  static final tableNamePunchlist = "PunchlistElement";
-  static final tableNameItem = "Item";
+  static final tableNamePunchlist = "PunchlistTable";
+  static final tableNameItem = "ItemTable";
 
   Future<Database> get database async {
     if (_database != null) {
@@ -29,9 +29,8 @@ class DBProvider {
   void createSampleData(Database db) async {
     final pref = await SharedPreferences.getInstance();
     if (pref.getBool('isAlreadySample') != true) {
-      String samplePunchlistId = Uuid().v4();
+      int samplePunchlistId = 1;
       PunchlistElement punchlistElement = new PunchlistElement(
-        punchlistId: samplePunchlistId,
         punchlistName: "カフェの設営",
         createDate: (DateFormat.yMMMd()).format(DateTime.now()),
         explanationPunchlist: "サンプルで作成されましたパンチリストです。"
@@ -42,7 +41,6 @@ class DBProvider {
       await db.insert(tableNamePunchlist, punchlistElement.toMap());
       Item sampleItem1 = Item(
         punchlistId: samplePunchlistId,
-        itemId: Uuid().v4(),
         imgName: "",
         itemName: "椅子の設営",
         itemExplanation: "サンプルで作成されたタスクです。"
@@ -56,7 +54,6 @@ class DBProvider {
       await db.insert(tableNameItem, sampleItem1.toMap());
       Item sampleItem2 = Item(
         punchlistId: samplePunchlistId,
-        itemId: Uuid().v4(),
         imgName: "",
         itemName: "テーブルの搬入",
         itemExplanation: "サンプルで作成されたタスクです。"
@@ -72,20 +69,20 @@ class DBProvider {
 
   Future<Database> initDB() async {
     documentsDirectory = await getApplicationDocumentsDirectory();
-    String path = join(documentsDirectory.path, "Punchlist_DB.db");
+    String path = join(documentsDirectory.path, "Punchlist_info_DB.db");
     return await openDatabase(path, version: 1, onCreate: _createTable);
   }
 
   Future<void> _createTable(Database db, int version) async {
-    await db.execute("CREATE TABLE PunchlistElement ("
-        "punchlistId TEXT PRIMARY KEY,"
+    await db.execute("CREATE TABLE PunchlistTable ("
+        "punchlistId INTEGER PRIMARY KEY AUTOINCREMENT,"
         "punchlistName TEXT,"
         "createDate TEXT,"
         "explanationPunchlist TEXT"
         ")");
-    await db.execute("CREATE TABLE Item ("
-        "punchlistId TEXT,"
-        "itemId TEXT PRIMARY KEY,"
+    await db.execute("CREATE TABLE ItemTable ("
+        "punchlistId INTEGER,"
+        "itemId INTEGER PRIMARY KEY AUTOINCREMENT,"
         "imgName TEXT,"
         "itemName TEXT,"
         "itemExplanation TEXT,"
@@ -102,7 +99,10 @@ class DBProvider {
 
   getAllPunchlist() async {
     final db = await database;
-    var res = await db.query(tableNamePunchlist);
+    var res = await db.query(
+      tableNamePunchlist,
+      orderBy: "punchlistId DESC",
+    );
     List<PunchlistElement> list = res.isNotEmpty
         ? res.map((c) => PunchlistElement.fromMap(c)).toList()
         : [];
@@ -121,7 +121,7 @@ class DBProvider {
     return res;
   }
 
-  deletePunchlist(String punchlistId) async {
+  deletePunchlist(int punchlistId) async {
     final db = await database;
     var res = db.delete(tableNamePunchlist,
         where: "punchlistId = ?", whereArgs: [punchlistId]);
@@ -135,10 +135,14 @@ class DBProvider {
     return res;
   }
 
-  getAllItemByPunchlistId(String punchlistId) async {
+  getAllItemByPunchlistId(int punchlistId) async {
     final db = await database;
-    var res = await db.query(tableNameItem,
-        where: 'punchlistId = ?', whereArgs: [punchlistId]);
+    var res = await db.query(
+      tableNameItem,
+      where: 'punchlistId = ?',
+      whereArgs: [punchlistId],
+      orderBy: "itemId DESC",
+    );
     List<Item> list =
         res.isNotEmpty ? res.map((c) => Item.fromMap(c)).toList() : [];
     return list;
@@ -151,14 +155,14 @@ class DBProvider {
     return res;
   }
 
-  deleteItemByItemId(String itemId) async {
+  deleteItemByItemId(int itemId) async {
     final db = await database;
     var res =
         db.delete(tableNameItem, where: "itemId = ?", whereArgs: [itemId]);
     return res;
   }
 
-  deleteItemByPunchlistId(String punchlistId) async {
+  deleteItemByPunchlistId(int punchlistId) async {
     final db = await database;
     var res = db.delete(tableNameItem,
         where: "punchlistId = ?", whereArgs: [punchlistId]);

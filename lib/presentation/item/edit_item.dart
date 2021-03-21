@@ -24,7 +24,7 @@ class _EditItemPageState extends State {
     PunchlistElement selectedPunchListElement =
         args["selectedPunchListElement"];
     String itemStatus = selectedItem.itemStatus;
-    String itemId = selectedItem.itemId;
+    int itemId = selectedItem.itemId;
     String imgName = selectedItem.imgName;
     double _value = double.parse(selectedItem.itemStatus);
     return Scaffold(
@@ -53,7 +53,7 @@ class ChangeForm extends StatefulWidget {
   PunchlistElement selectedPunchlistElement;
   Item selectedItem;
   File imageFile;
-  String itemId;
+  int itemId;
   String imgName;
   String itemStatus;
   double _value;
@@ -86,7 +86,7 @@ class _ChangeFormState extends State<ChangeForm> {
   final _formKey = GlobalKey<FormState>();
   PunchlistElement selectedPunchlistElement;
   Item selectedItem;
-  String itemId;
+  int itemId;
   File imageFile;
   String imgName;
   final String _imgName;

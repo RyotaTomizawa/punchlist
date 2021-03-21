@@ -49,7 +49,6 @@ class ChangeForm extends StatefulWidget {
 
 class _ChangeFormState extends State<ChangeForm> {
   final _formKey = GlobalKey<FormState>();
-  String itemId = Uuid().v4();
   File imageFile;
   String imgName = '';
   String itemName = '';
@@ -301,7 +300,6 @@ class _ChangeFormState extends State<ChangeForm> {
     }
     item = Item(
       punchlistId: selectedPunchlistElement.punchlistId,
-      itemId: this.itemId,
       imgName: this.imgName,
       itemName: this.itemName,
       itemExplanation: this.itemExplanation,
