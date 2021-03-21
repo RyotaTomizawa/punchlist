@@ -116,7 +116,7 @@ class _ChangeFormState extends State<ChangeForm> {
                   ),
                   TextFormField(
                     maxLines: 7,
-                    maxLength: 200,
+                    maxLength: 190,
                     maxLengthEnforced: true,
                     decoration: const InputDecoration(
                       labelText: 'アイテム概要 *',

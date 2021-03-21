@@ -101,7 +101,7 @@ class _ChangeFormState extends State<ChangeForm> {
                       ),
                     ),
                     TextFormField(
-                      maxLength: 200,
+                      maxLength: 190,
                       maxLines: 7,
                       decoration: const InputDecoration(
                         labelText: '*パンチリスト概要',

@@ -12,7 +12,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'package:path_provider/path_provider.dart';
 import 'dart:async';
 import 'package:punch_list_app/control/db_provider.dart';
 import 'package:admob_flutter/admob_flutter.dart';
@@ -294,7 +293,7 @@ class _TopPunchlistPageState extends State {
         pw.Container(
           padding: pw.EdgeInsets.only(top: 5),
           child: pw.Text(
-            explanationPunchlist,
+            checkNewline(explanationPunchlist, 48),
             style: pw.TextStyle(font: ttf, fontSize: 10),
           ),
         ),
@@ -324,9 +323,9 @@ class _TopPunchlistPageState extends State {
       String imgPath = DBProvider.documentsDirectory.path + "/" + item.imgName;
       String itemName = item.itemName;
       String itemExplanation = item.itemExplanation;
-      String itemStatus = item.itemStatus == '1' ? '作業完了' : '作業未完了';
+      String itemStatus = item.itemStatus;
       itemPdfList.add(pw.Row(
-        crossAxisAlignment: pw.CrossAxisAlignment.start,
+        mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
         children: <pw.Widget>[
           pw.SizedBox(
             width: 100,
@@ -339,7 +338,10 @@ class _TopPunchlistPageState extends State {
                         font: ttf, fontSize: 10, color: PdfColors.grey),
                   ),
           ),
-          pw.Container(
+          pw.Flexible(
+              child: pw.Container(
+            height: 100,
+            width: 260,
             padding: pw.EdgeInsets.only(left: 5, right: 5),
             child: pw.Column(
               crossAxisAlignment: pw.CrossAxisAlignment.start,
@@ -349,20 +351,18 @@ class _TopPunchlistPageState extends State {
                   style: pw.TextStyle(font: ttf, fontSize: 15),
                 ),
                 pw.Text(
-                  itemStatus,
-                  style: pw.TextStyle(
-                      font: ttf,
-                      fontSize: 10,
-                      color: item.itemStatus == '1'
-                          ? PdfColors.green
-                          : PdfColors.redAccent),
-                ),
-                pw.Text(
-                  itemExplanation,
+                  checkNewline(itemExplanation, 28),
+                  softWrap: true,
                   style: pw.TextStyle(font: ttf, fontSize: 10),
                 ),
               ],
             ),
+          )),
+          pw.Image(
+            pw.MemoryImage(
+                File(getProressImgPath(itemStatus)).readAsBytesSync()),
+            height: 100,
+            width: 100,
           ),
         ],
       ));
@@ -374,6 +374,51 @@ class _TopPunchlistPageState extends State {
       );
     }
     return itemPdfList;
+  }
+
+  static String checkNewline(String checkChar, int charLimits) {
+    List<String> checkCharList = checkChar.split("");
+    int i = 1;
+    String checkedChar = "";
+    for (var checkChar in checkCharList) {
+      if (checkChar == "\n") {
+        checkedChar += checkChar;
+        i = 1;
+        continue;
+      }
+      if (i == charLimits) {
+        checkChar += "\n";
+        checkedChar += checkChar;
+        i = 1;
+        continue;
+      }
+      checkedChar += checkChar;
+      i += 1;
+    }
+    return checkedChar;
+  }
+
+  static String getProressImgPath(String itemStatus) {
+    switch (itemStatus) {
+      case '0':
+        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/0_Progress.png';
+        break;
+      case '1':
+        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/25_Progress.png';
+        break;
+      case '2':
+        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/50_Progress.png';
+        break;
+      case '3':
+        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/100_Progress.png';
+        break;
+      case '4':
+        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/100_Progress.png';
+        break;
+      default:
+        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/0_Progress.png';
+        break;
+    }
   }
 
   static pw.Widget layoutImg(String imgPath) {
