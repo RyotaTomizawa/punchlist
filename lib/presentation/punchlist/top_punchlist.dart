@@ -16,6 +16,7 @@ import 'dart:async';
 import 'package:punch_list_app/control/db_provider.dart';
 import 'package:admob_flutter/admob_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
 
 class TopPunchlistPageState extends StatefulWidget {
   @override
@@ -27,6 +28,7 @@ class _TopPunchlistPageState extends State {
   @override
   initState() {
     super.initState();
+    checkSetImage();
     _showTutorial(context);
   }
 
@@ -94,7 +96,7 @@ class _TopPunchlistPageState extends State {
                                   attachmentPaths: [pdfPath],
                                 );
                               });
-                              //await FlutterEmailSender.send(email);
+                              await FlutterEmailSender.send(email);
                               final dir = Directory(pdfPath);
                               dir.deleteSync(recursive: true);
                             },
@@ -398,25 +400,43 @@ class _TopPunchlistPageState extends State {
     return checkedChar;
   }
 
+  static checkSetImage() async {
+    final pref = await SharedPreferences.getInstance();
+    if (pref.getBool('isAlreadySetImage') != true) {
+      Directory directory = await getApplicationDocumentsDirectory();
+      final path = directory.path;
+      final String tmpFileName = '_image.png';
+      for (int i = 0; i < 5; i++) {
+        String fileName = i.toString() + tmpFileName;
+        String filePath = path + '/' + fileName;
+        ByteData data = await rootBundle.load('assets/image/' + fileName);
+        List<int> bytes =
+            data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+        await File(filePath).writeAsBytes(bytes);
+      }
+      await pref.setBool('isAlreadySetImage', true);
+    }
+  }
+
   static String getProressImgPath(String itemStatus) {
     switch (itemStatus) {
       case '0':
-        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/0_Progress.png';
+        return DBProvider.documentsDirectory.path + '/' + '0_image.png';
         break;
       case '1':
-        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/25_Progress.png';
+        return DBProvider.documentsDirectory.path + '/' + '1_image.png';
         break;
       case '2':
-        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/50_Progress.png';
+        return DBProvider.documentsDirectory.path + '/' + '2_image.png';
         break;
       case '3':
-        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/100_Progress.png';
+        return DBProvider.documentsDirectory.path + '/' + '3_image.png';
         break;
       case '4':
-        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/100_Progress.png';
+        return DBProvider.documentsDirectory.path + '/' + '4_image.png';
         break;
       default:
-        return '/Users/ryota/AndroidStudioProjects/punch_list_app/lib/image/0_Progress.png';
+        return DBProvider.documentsDirectory.path + '/' + '0_image.png';
         break;
     }
   }

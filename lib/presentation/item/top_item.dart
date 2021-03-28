@@ -185,19 +185,19 @@ class _ChangeItemlist extends State<ChangeItemlist> {
   Widget showProgress(String itemStatus) {
     switch (itemStatus) {
       case '0':
-        return Image.asset('assets/0_Progress.png');
+        return Image.asset('assets/0_image.png');
         break;
       case '1':
-        return Image.asset('assets/25_Progress.png');
+        return Image.asset('assets/1_image.png');
         break;
       case '2':
-        return Image.asset('assets/50_Progress.png');
+        return Image.asset('assets/2_image.png');
         break;
       case '3':
-        return Image.asset('assets/75_Progress.png');
+        return Image.asset('assets/3_image.png');
         break;
       case '4':
-        return Image.asset('assets/100_Progress.png');
+        return Image.asset('assets/4_image.png');
         break;
       default:
         return Image.asset('assets/0_Progress.png');

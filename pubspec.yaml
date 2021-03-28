@@ -41,11 +41,11 @@ flutter:
   assets:
     - assets/imgTutorial1.png
     - assets/imgTutorial2.png
-    - assets/0_Progress.png
-    - assets/25_Progress.png
-    - assets/50_Progress.png
-    - assets/75_Progress.png
-    - assets/100_Progress.png
+    - assets/0_image.png
+    - assets/1_image.png
+    - assets/2_image.png
+    - assets/3_image.png
+    - assets/4_image.png
     - assets/font/ipagp.ttf
   uses-material-design: true
 
