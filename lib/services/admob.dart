@@ -9,8 +9,8 @@ class AdMobService {
       return null;
     } else if (Platform.isIOS) {
       // iOSの広告ユニットID
-      return 'ca-app-pub-3940256099942544/6300978111';
-      //'ca-app-pub-6708681869328892/8846770761';
+      return 'ca-app-pub-6708681869328892/8846770761';
+      //'ca-app-pub-3940256099942544/6300978111';
     }
     return null;
   }

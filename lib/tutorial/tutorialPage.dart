@@ -38,8 +38,8 @@ class TutorialPage extends StatelessWidget {
         color: const Color(0xFF90CAF9),
         imageAssetPath: 'assets/imgTutorial2.png',
         title: 'タスク画面',
-        body: 'タップ:完了/未完了 切替\n'
-            '右スワイプ:タスク編集',
+        body: 'タップ:タスク編集\n'
+            '左スワイプ:タスク削除',
         doAnimateImage: true),
     PageModel.withChild(
         child: Padding(
